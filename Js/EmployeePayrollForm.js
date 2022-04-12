@@ -1,3 +1,4 @@
+
 window.addEventListener('DOMContentLoaded', (event) => {
 
     /* UC8 set event listener on salary range*/
@@ -8,3 +9,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 })
 
+window.addEventListener('DOMContentLoaded', (event) => {
+    const name = document.querySelector('#name');
+    const textError = document.querySelector('.text-error');
+    name.addEventListener('input', function() {
+        if (name.value.length == 0) {
+            textError.textContent = "";
+            return;
+        }
+        try {
+            (new EmpPayrollData).name = name.value;;
+            textError.textContent = "";
+        } catch (e) {
+            textError.textContent = e;
+        }
+    });
+})
