@@ -1,40 +1,49 @@
-//UC19-A
+//UC21 to view Employee Payroll details from Local Storage.  
+//the innerHTML is populated by attaching a Listener to DOMContentLoaded event.
 
+let empPayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
+    empPayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
-})
+    localStorage.removeItem('editEmp');
+});
+
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('EmployeePayrollList') ? JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+}
 /*ES6 features*/
 /*Template literals are enclosed by the backtick (` `) character
     instead of double or single quotes.
  *  Template literals can contain placeholders. These are
     indicated by the dollar sign and curly braces 
 */
-function createInnerHtml() {
+const createInnerHtml = () => {
     const headerHtml = `<tr><th></th><th>Name</th><th>Gender</th><th>Department</th>
-            <th>Salary</th><th>start Date</th><th>Actions</th></tr>`
-    
+        <th>Salary</th><th>start Date</th><th>Actions</th></tr>`
+    if (empPayrollList.length == 0) return;
     let innerHtml = `${headerHtml}`
-    let empPayrollList = createEmployeePayrollJSON()
     for (const empPayrollData of empPayrollList) {
         innerHtml = `${innerHtml}
         <tr>
-        <td><img src="${empPayrollData._profilePic}" class="profile" width="30px" alt=""></td>
+        <td><img class ="profile" src="${empPayrollData._profilePic}" alt=""></td>
         <td>${empPayrollData._name}</td>
         <td>${empPayrollData._gender}</td>
         <td>${getDeptHtml(empPayrollData._department)}</td>
         <td>${empPayrollData._salary}</td>
-        <td>${empPayrollData._startDate}</td>
+        <td>${StringifyDate(empPayrollData._startDate)}</td>
         <td>
-            <img id="1" name="${empPayrollData._id}" onclick="remove(this)" alt="delete" width="30px" src="../Assets/icons/delete-black-18dp.svg">
-            <img id="1" name="${empPayrollData._id}" onclick="update(this)" alt="edit" width="30px" src="../Assets/icons/create-black-18dp.svg  ">
+            <img id="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg">
+            <img id="${empPayrollData._id}" onclick="update(this)"  src="../assets/icons/create-black-18dp.svg">
         </td>
-    </tr>`
+    </tr>
+    `;
     }
-    document.querySelector('#display').innerHTML = innerHtml
+    document.querySelector('#table-display').innerHTML = innerHtml
 }
 
 //UC20 to view Employee Payroll details in a Tabular Format from JSON Object.
-
+/*
 const createEmployeePayrollJSON = () => {
     let empPayrollListLocal = [
         {
@@ -65,6 +74,7 @@ const createEmployeePayrollJSON = () => {
     ]
     return empPayrollListLocal
 }
+*/
 
 //Display Employee Details from JSON Object including the Department
 function getDeptHtml(deptList) {
@@ -74,5 +84,3 @@ function getDeptHtml(deptList) {
     }
     return deptHtml
 }
-
-
